@@ -4,18 +4,19 @@ require dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_
 use PHPUnit\Framework\TestCase;
 use TDD\Receipt;
 class ReceiptTest extends TestCase {
+    public function setUp() {  //lisame meetodi setUp
+        $this->Receipt = new Receipt(); // loome receipt objekti, mis on võrdne uue receipt objektiga
+    }
+    public function tearDown() {  //lisame meetodi tearDown, see tühistab receipt objekti, tagades, et PHP ei kannaks midagi ühest testikäigust teise.
+        unset($this->Receipt); //
+    }
     public function testTotal() {
-        $Receipt = new Receipt(); //Luuakse objekt 'Receipt'
-
+        $input = [0,2,5,9]; // antud arvud, mis liidetakse kokku
+        $output = $this->Receipt->total($input); // output on siis võrdne selle arve summaga. See muudab testi rohkem isoleeritumaks
         $this->assertEquals(
-            15, //Arve eeldatav summa peaks olema 15.
-
-            $Receipt->total([0,2,5,8]), // Kui antud arvude summa (0,2,5,8) võrdub 15, siis test on sooritatud.
-            // Kui eeldatava summa või antud arvud muudetakse ja selle summa on suurem või väiksem 15'st,
-            // siis test kukub läbi.
-            'When summing the total should equal 15'
+            15, // eeldatakse, et arve summa on 15
+            $output, // väljastab summa
+            'When summing the total should equal 15' // väljastab sõnumi, kui test kukub läbi
         );
     }
 }
-
-
