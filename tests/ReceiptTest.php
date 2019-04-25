@@ -51,6 +51,13 @@ class ReceiptTest extends TestCase {
         );
     }
 
+    public function testTotalException() { // funktsioon viskab erandi, kui kupongi väärtus on suurem, kui 1.00
+        $input = [0,2,5,8];
+        $coupon = 1.20;
+        $this->expectException('BadMethodCallException');
+        $this->Receipt->total($input, $coupon);
+    }
+
     public function testPostTaxTotal() { // lisame uue funktsiooni, sellega ehitame mock PHPUniti
         $items = [1,2,5,8]; // lisame väärtused, mis muutab stubi mockiks
         $tax = 0.20;
