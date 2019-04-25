@@ -16,13 +16,25 @@ class ReceiptTest extends TestCase {
 
     public function testTotal(){
         $input = [0, 2, 5, 8]; // antud arvud, mis liidetakse kokku
-        $output = $this->Receipt->total($input); // output on siis võrdne selle arve summaga. See muudab testi rohkem isoleeritumaks
+        $coupon = null; // lisame testTotalile kupongi, mis on võrdne nullile, millest test ei hooli, kui terminalis testid jooksma pannakse
+        $output = $this->Receipt->total($input, $coupon); // output on siis võrdne selle arve summaga. See muudab testi rohkem isoleeritumaks
         $this->assertEquals(
             15, // eeldatakse, et arve summa on 15
             $output, // väljastab summa
             'When summing the total should equal 15' // väljastab sõnumi, kui test kukub läbi
         );
 
+    }
+
+    public function testTotalAndCoupon() {
+        $input = [0,2,5,8];
+        $coupon = 0.20;
+        $output = $this->Receipt->total($input, $coupon);
+        $this->assertEquals(
+            12, // kui kupong on arvutatud, siis tvastus peaks olema 12, mitte 15
+            $output,
+            'When summing the total should equal 12'
+        );
     }
 
     public function testTax() // loome uue meetodi
