@@ -37,8 +37,19 @@ class ReceiptTest extends TestCase {
         );
     }
 
-    public function testTax() // loome uue meetodi
-    {
+    public function testPostTaxTotal() { // lisame uue funktsiooni, sellega ehitame mock PHPUniti
+        $Receipt = $this->getMockBuilder('TDD\Receipt')  //ja me ehitame Receipt klassist
+            ->setMethods(['tax', 'total']) // ta võtab need kaks meetodit, mis vastavad totalile ja tax'le
+            ->getMock();
+        $Receipt->method('total')
+            ->will($this->returnValue(10.00)); // annavad vajalikud andmed
+        $Receipt->method('tax')
+            ->will($this->returnValue(1.00)); // annavad vajalikud andmed
+        $result = $Receipt->postTaxTotal([1,2,5,8], 0.20, null);  // võtame väärtused
+        $this->assertEquals(11.00, $result); // ning loodame, et oodatud vastus on 11.00
+    }
+
+    public function testTax() { // loome uue meetodi
         $inputAmount = 10.00; //loome sisendi, mis on 10 rahaühikut
         $taxInput = 0.10; // see on maksu %
         $output = $this->Receipt->tax($inputAmount, $taxInput); // kutsume selle meetodi Receipt objektis välja, mis korrutab parameetrid.

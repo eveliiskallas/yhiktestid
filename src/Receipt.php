@@ -12,4 +12,9 @@ class Receipt {
     public function tax($amount, $tax) {
         return ($amount * $tax); //Korrutab summa ja maksud
     }
+
+    public function postTaxTotal($items, $tax, $coupon) { // anname väärtused
+        $subtotal = $this->total($items, $coupon);
+        return $subtotal + $this->tax($subtotal, $tax);
+    }
 }
