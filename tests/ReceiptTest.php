@@ -34,7 +34,7 @@ class ReceiptTest extends TestCase {
     public function provideTotal() { // siin on erinevad väärtused, mida testTotal test hakkab läbi viima, ehk
         //  kui üks nendest failib, visatakse error, mis ütleb, milline output peaks olema.
         return [
-            [[1,2,5,8], 16],
+            'ints totaling 16' => [[1,2,5,8], 16],
             [[-1,2,5,8], 14],
             [[1,2,8], 11],
         ];
@@ -98,3 +98,6 @@ class ReceiptTest extends TestCase {
 
 // test on nüüd mock ning terminalis on näha, et failis on neli testi ning 5 väidet, ehk mock on uus väide
 // ning nende andmed peavad olema õiged, kui mockis on viga, siis test feilib
+
+// kui me tahame veel täpsemalt, siis me saame testi filtreerida selle võtmega, kirjutame terminali sisse vendor\bin\phpunit --filter
+// ning me saame selle võrduma panna näiteks testTotal või number 1-ga, mis võtab siis ainult valitud testi ning jooksutab seda.
