@@ -14,16 +14,30 @@ class ReceiptTest extends TestCase {
         unset($this->Receipt); //
     }
 
-    public function testTotal(){
-        $input = [0, 2, 5, 8]; // antud arvud, mis liidetakse kokku
+    /**
+     * @dataProvider provideTotal // dataProvideri abil saame testida erinevaid väärtuseid, ilma et peaksime koodi mitu korda dubleerima
+     */
+
+    public function testTotal($items, $expected){
+//        $input = [0, 2, 5, 8]; // antud arvud, mis liidetakse kokku
         $coupon = null; // lisame testTotalile kupongi, mis on võrdne nullile, millest test ei hooli, kui terminalis testid jooksma pannakse
-        $output = $this->Receipt->total($input, $coupon); // output on siis võrdne selle arve summaga. See muudab testi rohkem isoleeritumaks
+        $output = $this->Receipt->total($items, $coupon); // output on siis võrdne selle arve summaga. See muudab testi rohkem isoleeritumaks
         $this->assertEquals(
-            15, // eeldatakse, et arve summa on 15
+//            15, // eeldatakse, et arve summa on 15
+            $expected, // oodatavad tulemused, mis tuleb provideTotal funktsioonist
             $output, // väljastab summa
-            'When summing the total should equal 15' // väljastab sõnumi, kui test kukub läbi
+            "When summing the total should equal {$expected}"  // väljasab sõnumi, kui test kukub läbi
         );
 
+    }
+
+    public function provideTotal() { // siin on erinevad väärtused, mida testTotal test hakkab läbi viima, ehk
+        //  kui üks nendest failib, visatakse error, mis ütleb, milline output peaks olema.
+        return [
+            [[1,2,5,8], 16],
+            [[-1,2,5,8], 14],
+            [[1,2,8], 11],
+        ];
     }
 
     public function testTotalAndCoupon() {
