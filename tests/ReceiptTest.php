@@ -38,13 +38,29 @@ class ReceiptTest extends TestCase {
     }
 
     public function testPostTaxTotal() { // lisame uue funktsiooni, sellega ehitame mock PHPUniti
+        $items = [1,2,5,8]; // lisame väärtused, mis muutab stubi mockiks
+        $tax = 0.20;
+        $coupon = null;
         $Receipt = $this->getMockBuilder('TDD\Receipt')  //ja me ehitame Receipt klassist
             ->setMethods(['tax', 'total']) // ta võtab need kaks meetodit, mis vastavad totalile ja tax'le
             ->getMock();
-        $Receipt->method('total')
-            ->will($this->returnValue(10.00)); // annavad vajalikud andmed
-        $Receipt->method('tax')
-            ->will($this->returnValue(1.00)); // annavad vajalikud andmed
+
+        $Receipt->expects($this->once())
+            ->method('total')
+            ->with($items, $coupon)
+            ->will($this->returnValue(10.00));
+
+//        $Receipt->method('total')
+//            ->will($this->returnValue(10.00)); // annavad vajalikud andmed
+
+        $Receipt->expects($this->once()) // kutsub koodi välja ainult ühe korra, see kas kutsub mingi arvu ühe korra või ei kutsugi.
+            ->method('tax')
+            ->with(10.00, $tax)
+            ->will($this->returnValue(1.00));
+
+//        $Receipt->method('tax')
+//            ->will($this->returnValue(1.00)); // annavad vajalikud andmed
+
         $result = $Receipt->postTaxTotal([1,2,5,8], 0.20, null);  // võtame väärtused
         $this->assertEquals(11.00, $result); // ning loodame, et oodatud vastus on 11.00
     }
@@ -65,3 +81,6 @@ class ReceiptTest extends TestCase {
 // Kui teste on mitu, mis tähendab, et terminal ei jooksuta neid kiiresti läbi. Seega on vaja terminali
 //hoopis kirjutada $vendor\bin\phpunit tests\ ja ss täpsustada faili ehk ReceiptTest.php, mmis peaks võtma
 //ainult testid, mis on selles failis
+
+// test on nüüd mock ning terminalis on näha, et failis on neli testi ning 5 väidet, ehk mock on uus väide
+// ning nende andmed peavad olema õiged, kui mockis on viga, siis test feilib

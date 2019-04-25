@@ -1,7 +1,7 @@
 <?php
 namespace TDD;
 class Receipt {
-    public function total(array $items = [1, 2, 3], $coupon) {
+    public function total(array $items = [], $coupon) {
         $sum = array_sum($items);
         if (!is_null($coupon)) { //kui kupong ei ole võrdne nulliga
             return $sum - ($sum * $coupon);  // Siin korrutab summa kupongi hinnaga ning siis lahutab summast.
